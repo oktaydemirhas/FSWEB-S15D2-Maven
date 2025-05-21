@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(ResultAnalyzer.class)
@@ -99,7 +100,11 @@ public class MainTest {
         Set<Task> taskSet2 = new HashSet<>();
         taskSet.add(task2);
 
-        Set<Task> totals = taskData.getUnion(taskSet, taskSet2);
+        java.util.List<Set<Task>> setsToUnion = new java.util.ArrayList<>();
+        setsToUnion.add(taskSet);
+        setsToUnion.add(taskSet2);
+
+        Set<Task> totals = taskData.getUnion(setsToUnion);
         assertEquals(totals.size(), 2);
     }
 
@@ -112,7 +117,7 @@ public class MainTest {
         Set<Task> taskSet2 = new HashSet<>();
         taskSet2.add(task2);
 
-        Set<Task> intersections = taskData.getIntersection(taskSet, taskSet2);
+        Set<Task> intersections = taskData.getIntersect(taskSet, taskSet2);
 
         for(Task task: intersections){
             assertEquals(task, task2);
@@ -130,7 +135,7 @@ public class MainTest {
         Set<Task> taskSet2 = new HashSet<>();
         taskSet2.add(task2);
 
-        Set<Task> differences = taskData.getDifferences(taskSet, taskSet2);
+        Set<Task> differences = taskData.getDifference(taskSet, taskSet2);
 
         for(Task task: differences){
             assertEquals(task, task1);
@@ -142,10 +147,10 @@ public class MainTest {
     @DisplayName("findUniqueWords doğru çalışıyor mu ?")
     @Test
     public void testFindUniqueWordsMethod() {
-        assertEquals(StringSet.findUniqueWords().size(), 143);
+        assertEquals(StringSet.findUniqueWords().size(), 149);
 
         List<String> results = StringSet.findUniqueWords().stream().collect(Collectors.toList());
-        assertEquals(results.get(0), "a");
+        assertEquals("1863", results.get(0));
         assertEquals(results.get(results.size()-1), "wrote");
 
     }
